@@ -1,7 +1,8 @@
 import Header from "./components/Header";
 import RestaurantCard from "./components/RestaurantCard";
-import { Cuisine, PRICE, PrismaClient, Location } from "@prisma/client";
+import { Cuisine, PRICE, PrismaClient, Location, Review } from "@prisma/client";
 
+const prisma = new PrismaClient();
 export interface RestaurantCardType {
   id: number;
   name: string;
@@ -10,9 +11,8 @@ export interface RestaurantCardType {
   cuisine: Cuisine;
   location: Location;
   price: PRICE;
+  reviews: Review[];
 }
-
-const prisma = new PrismaClient();
 
 const fetchRestaurants = async (): Promise<RestaurantCardType[]> => {
   const restaurants = await prisma.restaurant.findMany({
@@ -24,6 +24,7 @@ const fetchRestaurants = async (): Promise<RestaurantCardType[]> => {
       slug: true,
       location: true,
       price: true,
+      reviews: true,
     },
   });
 
