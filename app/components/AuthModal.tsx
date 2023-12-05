@@ -4,8 +4,9 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AuthModalInputs from "./AuthModalInputs";
+import useAuth from "@/hooks/useAuth";
 
 const style = {
   position: "absolute" as "absolute",
@@ -24,6 +25,7 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const { signin } = useAuth();
 
   const renderContent = (signinContent: string, signupContent: string) => {
     return isSignin ? signinContent : signupContent;
@@ -37,6 +39,35 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
     city: "",
     password: "",
   });
+
+  const [disabled, setDisabled] = useState(true);
+
+  useEffect(() => {
+    if (isSignin) {
+      if (inputs.password && inputs.email) {
+        return setDisabled(false);
+      }
+    } else {
+      if (
+        inputs.firstName &&
+        inputs.lastName &&
+        inputs.email &&
+        inputs.password &&
+        inputs.city &&
+        inputs.phone
+      ) {
+        return setDisabled(false);
+      }
+    }
+
+    setDisabled(true);
+  }, [inputs]);
+
+  const handleClick = () => {
+    if (isSignin) {
+      signin({ email: inputs.email, password: inputs.password });
+    }
+  };
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
@@ -81,7 +112,11 @@ export default function AuthModal({ isSignin }: { isSignin: boolean }) {
                 handleChangeInput={handleChangeInput}
                 isSignin={isSignin}
               />
-              <button className="uppercase bg-red-600 w-full text-white p-3 rounded text-sm mb-5 disabled:bg-gray-400">
+              <button
+                className="uppercase bg-red-600 w-full text-white p-3 rounded text-sm mb-5 disabled:bg-gray-400"
+                disabled={disabled}
+                onClick={handleClick}
+              >
                 {renderContent("Sign in", "Create Account")}
               </button>
             </div>
