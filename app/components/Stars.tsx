@@ -1,4 +1,3 @@
-import React from "react";
 import fullStar from "../../public/full-star.png";
 import halfStar from "../../public/half-star.png";
 import emptyStar from "../../public/empty-star.png";
