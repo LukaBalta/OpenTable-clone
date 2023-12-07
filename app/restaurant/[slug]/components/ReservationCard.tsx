@@ -1,6 +1,8 @@
 "use client";
 
-import React from 'react'
+import { partySize } from "../../../../data";
+
+import React from "react";
 
 export default function ReservationCard() {
   return (
@@ -11,8 +13,9 @@ export default function ReservationCard() {
       <div className="my-3 flex flex-col">
         <label htmlFor="">Party size</label>
         <select name="" className="py-3 border-b font-light" id="">
-          <option value="">1 person</option>
-          <option value="">2 people</option>
+          {partySize.map((size) => (
+            <option value={size.value}>{size.label}</option>
+          ))}
         </select>
       </div>
       <div className="flex justify-between">
@@ -29,12 +32,10 @@ export default function ReservationCard() {
         </div>
       </div>
       <div className="mt-5">
-        <button
-          className="bg-red-600 rounded w-full px-4 text-white font-bold h-16"
-        >
+        <button className="bg-red-600 rounded w-full px-4 text-white font-bold h-16">
           Find Link Time
         </button>
       </div>
     </div>
-  )
+  );
 }
